@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+
+# Virtual env
+.venv/
+
+# Runtime outputs
+outputs/
+
+# Local model artifacts (share separately as zip)
+models/*.onnx
+models/*.pt
+models/*.engine
+models/*.bin
+models/*.data

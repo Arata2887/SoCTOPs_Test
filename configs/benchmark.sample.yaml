@@ -1,0 +1,89 @@
+runtime:
+  engine: onnxruntime
+  providers:
+    - CPUExecutionProvider
+  provider_options: {}
+  intra_op_num_threads: 4
+  inter_op_num_threads: 1
+  graph_optimization_level: ORT_ENABLE_ALL
+
+soc:
+  platform: your_soc_name
+  peak_tops:
+    fp32: 2.0
+    fp16: 4.0
+    int8: 8.0
+
+models:
+  resnet18_cls:
+    name: resnet18
+    task: cls
+    source: torchvision/resnet18 (ImageNet pretrained)
+    ops_per_inference: 1800000000
+    model_paths:
+      fp32: ../models/resnet18_fp32.onnx
+      fp16: ../models/resnet18_fp16.onnx
+      # int8 can be omitted in v1; it will be marked skipped_na
+      # int8: ../models/resnet18_int8.onnx
+    inputs:
+      - name: input
+        shape: [1, 3, 224, 224]
+        dtype: float32
+
+  fasterrcnn_mbv3_det:
+    name: fasterrcnn_mobilenet_v3_large_320_fpn
+    task: det
+    source: torchvision/fasterrcnn_mobilenet_v3_large_320_fpn (COCO pretrained)
+    ops_per_inference: 10000000000
+    model_paths:
+      fp32: ../models/fasterrcnn_mbv3_320_fp32.onnx
+      fp16: ../models/fasterrcnn_mbv3_320_fp16.onnx
+    inputs:
+      - name: images
+        shape: [3, 320, 320]
+        dtype: float32
+
+  keypointrcnn_kpt:
+    name: keypointrcnn_resnet50_fpn
+    task: kpt
+    source: torchvision/keypointrcnn_resnet50_fpn (COCO pretrained)
+    ops_per_inference: 17000000000
+    model_paths:
+      fp32: ../models/keypointrcnn_resnet50_fp32.onnx
+      fp16: ../models/keypointrcnn_resnet50_fp16.onnx
+    inputs:
+      - name: images
+        shape: [3, 640, 640]
+        dtype: float32
+
+  fcn_resnet50_seg:
+    name: fcn_resnet50
+    task: seg
+    source: torchvision/fcn_resnet50 (COCO_WITH_VOC_LABELS pretrained)
+    ops_per_inference: 12000000000
+    model_paths:
+      fp32: ../models/fcn_resnet50_fp32.onnx
+      fp16: ../models/fcn_resnet50_fp16.onnx
+    inputs:
+      - name: input
+        shape: [1, 3, 520, 520]
+        dtype: float32
+
+data:
+  random_benchmark: true
+  max_real_samples: 4
+  real_data:
+    cls:
+      - data/cls
+    det:
+      - data/det
+    kpt:
+      - data/kpt
+    seg:
+      - data/seg
+
+benchmark:
+  warmup_runs: 10
+  duration_sec: 2.0
+  repeats: 3
+  batch_size: 1

@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "soc-tops-bench"
+version = "0.1.0"
+description = "SoC TOPS benchmark workflow for cls/det/kpt/seg models"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+runtime = [
+  "onnxruntime>=1.18",
+]
+dev = [
+  "pytest>=8.0",
+]
+
+[dependency-groups]
+runtime = [
+  "onnxruntime>=1.18",
+]
+dev = [
+  "pytest>=8.0",
+]
+
+[tool.uv]
+default-groups = ["runtime", "dev"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["tops_bench*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
