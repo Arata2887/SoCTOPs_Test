@@ -115,7 +115,7 @@ uv run python -m tops_bench report --help
 - 在跨硬件平台对比时，应确保模型文件、输入尺寸、`ops_per_inference` 与计时参数保持一致。
 - 如需对接厂商专用执行后端，可通过配置切换 runtime/provider 实现扩展。
 
-## 9. 默认模型清单（已落地到 `models/`）
+## 9. 默认模型清单 
 
 - 分类：`resnet18_fp32.onnx` / `resnet18_fp16.onnx`
 - 检测：`fasterrcnn_mbv3_320_fp32.onnx` / `fasterrcnn_mbv3_320_fp16.onnx`
